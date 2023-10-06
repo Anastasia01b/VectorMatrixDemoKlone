@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Text;
+using System;
 using VectorDemo;
 
 namespace MatrixDemo
@@ -47,6 +45,23 @@ namespace MatrixDemo
                 return data.GetLength(1);
             }
         }
+
+        private static void ValidateMatrixSizes(Matrix m1, Matrix m2)
+        {
+            if (m1.Row != m2.Row || m1.Col != m2.Col)
+            {
+                throw new InvalidOperationException("Matrix sizes do not match");
+            }
+        }
+
+        private static void ValidateMatrixAndVectorSizes(Matrix matrix, Vector vector)
+        {
+            if (matrix.Row != vector.Length || matrix.Col != vector.Length)
+            {
+                throw new InvalidOperationException("Matrix row or column size is not equal to the length of the vector");
+            }
+        }
+
         public static Matrix operator*(Matrix m1, double c)
         {
            int row =m1.Row;
@@ -79,7 +94,7 @@ namespace MatrixDemo
 
             if (col1 != row2)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("The number of colums is not equal tothe number of rows");
             }
 
             Matrix result = new Matrix(row1, col2);
@@ -102,15 +117,12 @@ namespace MatrixDemo
         
         public static Matrix operator+(Matrix m1, Matrix m2)
         {
+            ValidateMatrixSizes(m1, m2);
+
             int row1 = m1.Row;
             int col1 = m1.Col;
             int col2 = m2.Col;
             int row2 = m2.Row;
-
-            if (col1 !=col2 || row1 !=row2)
-            {
-                throw new InvalidOperationException();
-            }
 
             Matrix result = new Matrix(row1, col1);
             for (int i =0; i<row1; i++)
@@ -125,15 +137,12 @@ namespace MatrixDemo
         
         public static Matrix operator-(Matrix m1, Matrix m2)
         {
+            ValidateMatrixSizes(m1, m2);
+
             int row1 = m1.Row;
             int col1 = m1.Col;
             int col2 = m2.Col;
             int row2 = m2.Row;
-
-            if (row1 != row2 || col1 != col2)
-            {
-                throw new InvalidOperationException();
-            }
 
             Matrix result = new Matrix(row1, col1);
             for (int i = 0; i < row1; i++)
@@ -148,14 +157,9 @@ namespace MatrixDemo
         
         public static Vector operator*(Matrix m1, Vector v1)
         {
-
+            ValidateMatrixAndVectorSizes(m1 , v1);
             int row = m1.Row;
             int col = m1.Col;
-
-            if(col !=v1.Length)
-            {
-                throw new InvalidOperationException();
-            }
 
             Vector result = new Vector(row);
             for (int i = 0; i < row;i++)
@@ -172,14 +176,10 @@ namespace MatrixDemo
         
         public static Vector operator*(Vector v1,Matrix m1)
         {
+            ValidateMatrixAndVectorSizes(m1, v1);
 
             int row = m1.Row;
             int col = m1.Col;
-
-            if (row != v1.Length)
-            {
-                throw new InvalidOperationException();
-            }
 
             Vector result = new Vector(col);
             for (int j = 0; j < col; j++)

@@ -54,14 +54,6 @@ namespace MatrixDemo
             }
         }
 
-        private static void ValidateMatrixAndVectorSizes(Matrix matrix, Vector vector)
-        {
-            if (matrix.Row != vector.Length || matrix.Col != vector.Length)
-            {
-                throw new InvalidOperationException("Matrix row or column size is not equal to the length of the vector");
-            }
-        }
-
         public static Matrix operator*(Matrix m1, double c)
         {
            int row =m1.Row;
@@ -157,7 +149,11 @@ namespace MatrixDemo
         
         public static Vector operator*(Matrix m1, Vector v1)
         {
-            ValidateMatrixAndVectorSizes(m1 , v1);
+            if (m1.Col != v1.Length )
+            {
+                throw new InvalidOperationException("Matrix col size is not equal to the length of the vector");
+            }
+
             int row = m1.Row;
             int col = m1.Col;
 
@@ -176,7 +172,10 @@ namespace MatrixDemo
         
         public static Vector operator*(Vector v1,Matrix m1)
         {
-            ValidateMatrixAndVectorSizes(m1, v1);
+            if (m1.Row != v1.Length)
+            {
+                throw new InvalidOperationException("Matrix row size is not equal to the length of the vector");
+            }
 
             int row = m1.Row;
             int col = m1.Col;
